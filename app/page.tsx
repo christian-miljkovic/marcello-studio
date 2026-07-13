@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './page.module.css';
 
 const clients = [
@@ -8,6 +9,18 @@ const clients = [
 export default function Home() {
   return (
     <main className={styles.page}>
+      <div className={styles.video} aria-hidden="true">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/background-poster.jpg"
+        >
+          <source src="/background.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div className={styles.column}>
         <h1 className={styles.wordmark}>Marcello Studio</h1>
 
@@ -35,6 +48,10 @@ export default function Home() {
         <p className={styles.contact}>
           <a href="mailto:contact@marcello.studio">contact@marcello.studio</a>
           <span aria-hidden="true"> · </span>New York
+        </p>
+
+        <p className={styles.contact}>
+          <Link href="/sketch">See how we think</Link>
         </p>
       </div>
     </main>

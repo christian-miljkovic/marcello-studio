@@ -27,6 +27,7 @@
 - [ ] Christian: review Slang employment agreement for moonlighting/IP clauses
 - [ ] Update site + templates if chosen domain/email differ from `contact@marcello.studio` (one-line changes: `app/page.tsx`, `docs/outreach-templates.md`)
 - [ ] Attach domain to Vercel project `marcello`; site live on real domain (this also makes it public — until then, optionally disable Vercel Authentication in project settings to share the .vercel.app URL)
+- [ ] Create OpenRouter API key **with a spend cap** and add `OPENROUTER_API_KEY` (+ optional `OPENROUTER_MODEL`, e.g. GLM 5.2 slug) to Vercel env — until then /sketch serves curated fallback sketches
 - [ ] Ask HAITCH founders for written OK to name them (site + outreach) — ideally a quote too
 
 ## Month 1 (by 2026-08-13)

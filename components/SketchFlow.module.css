@@ -1,0 +1,68 @@
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.7333rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #767676;
+  margin-bottom: 0.6rem;
+}
+
+.input {
+  width: 100%;
+  max-width: 24rem;
+  border: none;
+  border-bottom: 1px solid #111;
+  background: transparent;
+  font: inherit;
+  padding: 0.2rem 0;
+  border-radius: 0;
+}
+
+.input:focus {
+  outline: none;
+  border-bottom-width: 2px;
+}
+
+.button {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #111;
+  padding: 0;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.status {
+  font-size: 0.8rem;
+  color: #767676;
+}
+
+.cta {
+  font-size: 0.8rem;
+  color: #767676;
+}
+
+.cta a {
+  color: #111;
+}
+
+.cta a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

@@ -38,6 +38,12 @@ describe('Marcello portfolio page', () => {
     }
   });
 
+  test('links to the See how we think sketch page', () => {
+    render(<Home />);
+    const link = screen.getByRole('link', { name: /see how we think/i });
+    expect(link).toHaveAttribute('href', '/sketch');
+  });
+
   test('offers a working email contact', () => {
     render(<Home />);
     const link = screen.getByRole('link', { name: /contact@marcello\.studio/i });

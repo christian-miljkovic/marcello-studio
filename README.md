@@ -13,5 +13,14 @@ npm install
 npm run dev     # http://localhost:3000
 npm test        # Vitest + React Testing Library
 npm run lint
-npm run build   # static
+npm run build
 ```
+
+## Environment
+
+The `/sketch` feature ("See how we think") generates live design sketches through OpenRouter:
+
+- `OPENROUTER_API_KEY` — create at openrouter.ai **with a per-key spend cap**. Without it, the route serves curated fallback sketches (dev, tests, and prod all work keyless).
+- `OPENROUTER_MODEL` — optional model override (default `z-ai/glm-4.6`), e.g. set the GLM 5.2 slug to A/B models without code changes.
+
+Set both locally in `.env.local` and in Vercel project settings for production.
