@@ -7,12 +7,19 @@ const SYSTEM = `You are the design director of Marcello Studio, a minimal, fashi
 
 Taste rules: no exclamation marks; no em dashes or hyphens in the hero line; never use the words "elevate", "timeless", "luxury" or "curated"; hero line reads like a lookbook caption, not an ad; product names sound like real garments from this brand; prices are plausible for the craft and consistent with each other. When in doubt, choose the quieter option.`;
 
-export async function generateSketch(answers: Answers): Promise<Sketch> {
+export async function generateSketch(
+  answers: Answers,
+  revision?: { sketch: Sketch; note: string }
+): Promise<Sketch> {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) return fallbackSketch(answers);
+  if (!apiKey) return revision ? revision.sketch : fallbackSketch(answers);
 
   const openrouter = createOpenRouter({ apiKey });
   const model = process.env.OPENROUTER_MODEL ?? 'z-ai/glm-4.6';
+
+  const prompt = revision
+    ? `Brand: ${answers.brand}\nThey make: ${answers.craft}\nMood, in their word: ${answers.mood}\n\nCurrent sketch tokens:\n${JSON.stringify(revision.sketch)}\n\nThe client asks: "${revision.note}"\nReturn the full sketch with the minimal change that honors the request. Keep every other field identical unless the request forces it to change.`
+    : `Brand: ${answers.brand}\nThey make: ${answers.craft}\nMood, in their word: ${answers.mood}`;
 
   // Some models intermittently emit unparseable structured output;
   // one retry before the caller falls back to a canned sketch.
@@ -25,7 +32,7 @@ export async function generateSketch(answers: Answers): Promise<Sketch> {
         model: openrouter.chat(model, { reasoning: { effort: 'low' } }),
         schema: sketchSchema,
         system: SYSTEM,
-        prompt: `Brand: ${answers.brand}\nThey make: ${answers.craft}\nMood, in their word: ${answers.mood}`,
+        prompt,
         maxOutputTokens: 4000,
       });
       return object;

@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     siteName: 'Marcello Studio',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Marcello Studio',
+    description,
+  },
 };
 
 export const viewport: Viewport = {

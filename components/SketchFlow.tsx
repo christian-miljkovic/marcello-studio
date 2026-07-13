@@ -2,8 +2,11 @@
 
 import { useState, type FormEvent } from 'react';
 import SketchPreview from './SketchPreview';
+import { applyLocalRevision } from '@/lib/revise';
 import type { Answers, Sketch } from '@/lib/sketch';
 import styles from './SketchFlow.module.css';
+
+const MAX_REVISIONS = 3;
 
 const QUESTIONS: { key: keyof Answers; label: string }[] = [
   { key: 'brand', label: 'Name of the brand' },
@@ -19,6 +22,10 @@ export default function SketchFlow() {
   const [answers, setAnswers] = useState<Partial<Answers>>({});
   const [sketch, setSketch] = useState<Sketch | null>(null);
   const [status, setStatus] = useState<Status>('asking');
+  const [revisionsUsed, setRevisionsUsed] = useState(0);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [note, setNote] = useState('');
+  const [revising, setRevising] = useState(false);
 
   async function requestSketch(complete: Answers) {
     setStatus('sketching');
@@ -61,6 +68,53 @@ export default function SketchFlow() {
     setAnswers({});
     setSketch(null);
     setStatus('asking');
+    setRevisionsUsed(0);
+    setNoteOpen(false);
+    setNote('');
+    setRevising(false);
+  }
+
+  async function handleRevision(event: FormEvent) {
+    event.preventDefault();
+    const trimmed = note.trim();
+    if (!trimmed || !sketch || revising) return;
+
+    const local = applyLocalRevision(sketch, trimmed);
+    if (local) {
+      setSketch(local);
+      setRevisionsUsed(revisionsUsed + 1);
+      setNote('');
+      setNoteOpen(false);
+      return;
+    }
+
+    setRevising(true);
+    try {
+      const res = await fetch('/api/sketch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...(answers as Answers),
+          revision: { sketch, note: trimmed },
+        }),
+      });
+      if (!res.ok) throw new Error(`revision failed: ${res.status}`);
+      const data = (await res.json()) as { sketch?: Sketch; limited?: boolean };
+      if (data.limited) {
+        setStatus('limited');
+        return;
+      }
+      if (data.sketch) setSketch(data.sketch);
+      setRevisionsUsed((used) => used + 1);
+      setNote('');
+      setNoteOpen(false);
+    } catch {
+      // keep the current sketch; the note simply didn't take
+      setNote('');
+      setNoteOpen(false);
+    } finally {
+      setRevising(false);
+    }
   }
 
   if (status === 'limited') {
@@ -100,15 +154,66 @@ export default function SketchFlow() {
         />
         {status === 'done' && (
           <div className={styles.takeoverFooter}>
-            <p className={styles.cta}>
-              Like the direction?{' '}
-              <a href="mailto:contact@marcello.studio">
-                contact@marcello.studio
-              </a>
-            </p>
-            <button type="button" className={styles.button} onClick={restart}>
-              Start over
-            </button>
+            {noteOpen && revisionsUsed < MAX_REVISIONS ? (
+              <form className={styles.noteForm} onSubmit={handleRevision}>
+                <label className={styles.noteLabel} htmlFor="revision-note">
+                  Ask for a change
+                </label>
+                <input
+                  id="revision-note"
+                  className={styles.noteInput}
+                  value={note}
+                  onChange={(event) => setNote(event.target.value)}
+                  placeholder={'"warmer", "all serif", "moodier"'}
+                  maxLength={60}
+                  autoComplete="off"
+                  autoFocus
+                />
+                <button
+                  type="submit"
+                  className={styles.button}
+                  disabled={revising}
+                >
+                  {revising ? 'Revising…' : 'Revise'}
+                </button>
+              </form>
+            ) : (
+              <>
+                <p className={styles.cta}>
+                  Like the direction?{' '}
+                  <a href="mailto:contact@marcello.studio">
+                    contact@marcello.studio
+                  </a>
+                </p>
+                {revisionsUsed < MAX_REVISIONS ? (
+                  <>
+                    {revisionsUsed > 0 && (
+                      <span className={styles.revCount}>
+                        Revision {revisionsUsed} of {MAX_REVISIONS}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      className={styles.button}
+                      onClick={() => setNoteOpen(true)}
+                    >
+                      Ask for a change
+                    </button>
+                  </>
+                ) : (
+                  <span className={styles.revCount}>
+                    That&apos;s three revisions — the rest happens over email.
+                  </span>
+                )}
+                <button
+                  type="button"
+                  className={styles.button}
+                  onClick={restart}
+                >
+                  Start over
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>

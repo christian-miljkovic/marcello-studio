@@ -65,6 +65,95 @@ describe('SketchFlow', () => {
     });
   });
 
+  test('applies palette and type notes locally without another API call', async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ sketch }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    );
+
+    render(<SketchFlow />);
+    await answerThreeQuestions();
+    await screen.findByText(/salt-washed denim, cut in brooklyn/i);
+
+    await user.click(screen.getByRole('button', { name: /ask for a change/i }));
+    await user.type(screen.getByRole('textbox'), 'warmer and serif');
+    await user.click(screen.getByRole('button', { name: /revise/i }));
+
+    expect(await screen.findByText(/revision 1 of 3/i)).toBeVisible();
+    expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1);
+    expect(
+      screen.getByText(/salt-washed denim, cut in brooklyn/i)
+    ).toBeVisible();
+  });
+
+  test('sends unresolvable notes to the API as a revision request', async () => {
+    const user = userEvent.setup();
+    const revised = { ...sketch, heroLine: 'Denim cut for long weathering' };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ sketch }), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ sketch: revised }), { status: 200 })
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<SketchFlow />);
+    await answerThreeQuestions();
+    await screen.findByText(/salt-washed denim, cut in brooklyn/i);
+
+    await user.click(screen.getByRole('button', { name: /ask for a change/i }));
+    await user.type(screen.getByRole('textbox'), 'more romantic copy');
+    await user.click(screen.getByRole('button', { name: /revise/i }));
+
+    expect(
+      await screen.findByText(/denim cut for long weathering/i)
+    ).toBeVisible();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const body = JSON.parse(fetchMock.mock.calls[1][1].body as string);
+    expect(body.revision.note).toBe('more romantic copy');
+    expect(body.revision.sketch.heroLine).toBe(sketch.heroLine);
+  });
+
+  test('stops offering changes after three revisions', async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ sketch }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    );
+
+    render(<SketchFlow />);
+    await answerThreeQuestions();
+    await screen.findByText(/salt-washed denim, cut in brooklyn/i);
+
+    for (const note of ['darker', 'lighter', 'serif']) {
+      await user.click(
+        screen.getByRole('button', { name: /ask for a change/i })
+      );
+      await user.type(screen.getByRole('textbox'), note);
+      await user.click(screen.getByRole('button', { name: /revise/i }));
+    }
+
+    expect(
+      await screen.findByText(/the rest happens over email/i)
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: /ask for a change/i })
+    ).not.toBeInTheDocument();
+  });
+
   test('explains when the sketch limit is reached instead of faking a sketch', async () => {
     vi.stubGlobal(
       'fetch',
