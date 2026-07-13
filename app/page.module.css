@@ -1,0 +1,90 @@
+.page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 1.5rem;
+  animation: appear 300ms ease-out;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    animation: none;
+  }
+}
+
+.column {
+  max-width: 34rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.wordmark {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro {
+  max-width: 30rem;
+}
+
+.label {
+  font-size: 0.7333rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #767676;
+  margin-bottom: 0.75rem;
+}
+
+.clients {
+  list-style: none;
+}
+
+.clients a {
+  display: inline-block;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 2;
+}
+
+.clients a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 0.4em;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.clients a:hover .arrow,
+.clients a:focus-visible .arrow {
+  opacity: 1;
+}
+
+.contact {
+  color: #767676;
+}
+
+.contact a {
+  color: #111;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
