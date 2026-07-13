@@ -27,7 +27,10 @@ export default function Home() {
         <p className={styles.intro}>
           A creative technology and design studio for fashion brands, labels,
           and the studios around them. High touch, from the first conversation
-          to the final creation.
+          to the final creation.{' '}
+          <Link href="/sketch" className={styles.sketchLink}>
+            See how we think
+          </Link>
         </p>
 
         <section aria-labelledby="clients-heading">
@@ -48,10 +51,6 @@ export default function Home() {
         <p className={styles.contact}>
           <a href="mailto:contact@marcello.studio">contact@marcello.studio</a>
           <span aria-hidden="true"> · </span>New York
-        </p>
-
-        <p className={styles.contact}>
-          <Link href="/sketch">See how we think</Link>
         </p>
       </div>
     </main>

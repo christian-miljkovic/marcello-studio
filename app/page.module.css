@@ -95,6 +95,16 @@
   text-underline-offset: 3px;
 }
 
+.sketchLink {
+  font-style: italic;
+}
+
+.sketchLink:hover,
+.sketchLink:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .contact {
   font-size: 0.8rem;
   color: #767676;
