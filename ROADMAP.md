@@ -9,7 +9,9 @@
 
 ## Current state (update every session)
 
-*Last updated: 2026-07-13 by Claude*
+*Last updated: 2026-07-13 by Claude (evening)*
+
+- **/sketch is now the site's centerpiece**: full-viewport generated storefront concept (GLM 5.2 via OpenRouter, low reasoning effort — critical, reasoning models otherwise time out), atelier build-sequence loading state, 3-revision "Ask for a change" notes (palette/type/casing resolve locally, rest via model), honest quota-limit message, mobile-safe footer. OG link-preview image at /opengraph-image.
 
 - Studio identity chosen: **Marcello Studio** (Christian Marcello Miljkovic). Positioning: "a creative technology and design studio for fashion" — high touch, for brands + PR studios.
 - Portfolio site built at `~/fun/marcello/` (branch `launch-site`): tests green, lint clean, static build passing. Left-aligned layout; tagline "High touch, from the first conversation to the final creation."; contact is `contact@marcello.studio` — **domain not yet purchased, email not yet set up**.
