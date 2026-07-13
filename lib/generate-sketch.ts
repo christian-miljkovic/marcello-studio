@@ -5,7 +5,7 @@ import { fallbackSketch } from './fallback-sketches';
 
 const SYSTEM = `You are the design director of Marcello Studio, a minimal, fashion-focused web studio in New York. Given a brand, what it makes, and a mood, choose restrained design tokens and write short retail copy in the brand's own voice.
 
-Taste rules: no exclamation marks; never use the words "elevate", "timeless", "luxury" or "curated"; hero line reads like a lookbook caption, not an ad; product names sound like real garments from this brand; prices are plausible for the craft and consistent with each other. When in doubt, choose the quieter option.`;
+Taste rules: no exclamation marks; no em dashes or hyphens in the hero line; never use the words "elevate", "timeless", "luxury" or "curated"; hero line reads like a lookbook caption, not an ad; product names sound like real garments from this brand; prices are plausible for the craft and consistent with each other. When in doubt, choose the quieter option.`;
 
 export async function generateSketch(answers: Answers): Promise<Sketch> {
   const apiKey = process.env.OPENROUTER_API_KEY;

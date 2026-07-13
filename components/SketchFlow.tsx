@@ -59,10 +59,6 @@ export default function SketchFlow() {
     setStatus('asking');
   }
 
-  if (status === 'sketching') {
-    return <p className={styles.status}>Sketching…</p>;
-  }
-
   if (status === 'error') {
     return (
       <div className={styles.flow}>
@@ -78,17 +74,26 @@ export default function SketchFlow() {
     );
   }
 
-  if (status === 'done' && sketch) {
+  if (status === 'sketching' || status === 'done') {
     return (
-      <div className={styles.flow}>
-        <SketchPreview sketch={sketch} answers={answers as Answers} />
-        <p className={styles.cta}>
-          Like the direction?{' '}
-          <a href="mailto:contact@marcello.studio">contact@marcello.studio</a>
-        </p>
-        <button type="button" className={styles.button} onClick={restart}>
-          Start over
-        </button>
+      <div className={styles.takeover}>
+        <SketchPreview
+          sketch={status === 'done' ? sketch : null}
+          answers={answers as Answers}
+        />
+        {status === 'done' && (
+          <div className={styles.takeoverFooter}>
+            <p className={styles.cta}>
+              Like the direction?{' '}
+              <a href="mailto:contact@marcello.studio">
+                contact@marcello.studio
+              </a>
+            </p>
+            <button type="button" className={styles.button} onClick={restart}>
+              Start over
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -98,6 +103,9 @@ export default function SketchFlow() {
   return (
     <form className={styles.flow} onSubmit={handleSubmit}>
       <div>
+        <p className={styles.counter}>
+          {String(step + 1).padStart(2, '0')} — 03
+        </p>
         <label className={styles.label} htmlFor="sketch-answer">
           {question.label}
         </label>
@@ -108,6 +116,7 @@ export default function SketchFlow() {
           onChange={(event) => setValue(event.target.value)}
           autoComplete="off"
           maxLength={80}
+          autoFocus
         />
       </div>
       <button type="submit" className={styles.button}>
