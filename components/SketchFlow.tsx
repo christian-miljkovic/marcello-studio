@@ -11,7 +11,7 @@ const QUESTIONS: { key: keyof Answers; label: string }[] = [
   { key: 'mood', label: 'One word for the mood' },
 ];
 
-type Status = 'asking' | 'sketching' | 'done' | 'error';
+type Status = 'asking' | 'sketching' | 'done' | 'error' | 'limited';
 
 export default function SketchFlow() {
   const [step, setStep] = useState(0);
@@ -29,7 +29,11 @@ export default function SketchFlow() {
         body: JSON.stringify(complete),
       });
       if (!res.ok) throw new Error(`sketch request failed: ${res.status}`);
-      const data = (await res.json()) as { sketch: Sketch };
+      const data = (await res.json()) as { sketch?: Sketch; limited?: boolean };
+      if (data.limited || !data.sketch) {
+        setStatus('limited');
+        return;
+      }
       setSketch(data.sketch);
       setStatus('done');
     } catch {
@@ -57,6 +61,19 @@ export default function SketchFlow() {
     setAnswers({});
     setSketch(null);
     setStatus('asking');
+  }
+
+  if (status === 'limited') {
+    return (
+      <div className={styles.flow}>
+        <p className={styles.status}>
+          We have reached our limit of sketches for now. Come back later, or
+          write to{' '}
+          <a href="mailto:contact@marcello.studio">contact@marcello.studio</a>{' '}
+          and we will draw yours by hand.
+        </p>
+      </div>
+    );
   }
 
   if (status === 'error') {

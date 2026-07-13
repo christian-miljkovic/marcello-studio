@@ -65,6 +65,26 @@ describe('SketchFlow', () => {
     });
   });
 
+  test('explains when the sketch limit is reached instead of faking a sketch', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ limited: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    );
+
+    render(<SketchFlow />);
+    await answerThreeQuestions();
+
+    expect(
+      await screen.findByText(/reached our limit of sketches/i)
+    ).toBeVisible();
+    expect(screen.getByText(/contact@marcello\.studio/i)).toBeVisible();
+  });
+
   test('offers the studio email when the sketch request fails', async () => {
     vi.stubGlobal(
       'fetch',

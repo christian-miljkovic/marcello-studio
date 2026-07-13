@@ -14,13 +14,24 @@ export async function generateSketch(answers: Answers): Promise<Sketch> {
   const openrouter = createOpenRouter({ apiKey });
   const model = process.env.OPENROUTER_MODEL ?? 'z-ai/glm-4.6';
 
-  const { object } = await generateObject({
-    model: openrouter.chat(model),
-    schema: sketchSchema,
-    system: SYSTEM,
-    prompt: `Brand: ${answers.brand}\nThey make: ${answers.craft}\nMood, in their word: ${answers.mood}`,
-    maxOutputTokens: 700,
-  });
-
-  return object;
+  // Some models intermittently emit unparseable structured output;
+  // one retry before the caller falls back to a canned sketch.
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const { object } = await generateObject({
+        // Low reasoning effort: reasoning models otherwise spend the whole
+        // output budget thinking and never emit the JSON object.
+        model: openrouter.chat(model, { reasoning: { effort: 'low' } }),
+        schema: sketchSchema,
+        system: SYSTEM,
+        prompt: `Brand: ${answers.brand}\nThey make: ${answers.craft}\nMood, in their word: ${answers.mood}`,
+        maxOutputTokens: 4000,
+      });
+      return object;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
 }

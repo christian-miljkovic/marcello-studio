@@ -1,4 +1,10 @@
 .concept {
+  /* defaults so the wireframe state renders before tokens arrive;
+     the inline style on the completed sketch overrides these */
+  --sketch-bg: #ffffff;
+  --sketch-ink: #111111;
+  --sketch-muted: #767676;
+  --sketch-type: "Helvetica Neue", Helvetica, Arial, sans-serif;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -174,6 +180,9 @@
   height: clamp(8rem, 28vh, 16rem);
   margin: clamp(2rem, 6vh, 4rem) 0;
   animation-delay: 200ms;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
 }
 
 .ghostTiles {
@@ -199,7 +208,6 @@
 }
 
 .narration {
-  margin-top: 2rem;
   font-size: 0.7333rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;

@@ -20,17 +20,18 @@ export default function SketchPreview({
     return (
       <div className={styles.concept} aria-busy="true">
         <div className={`${styles.ghost} ${styles.ghostBar}`} />
-        <div className={`${styles.ghost} ${styles.ghostHero}`} />
+        <div className={`${styles.ghost} ${styles.ghostHero}`}>
+          <p className={styles.narration} aria-live="polite">
+            {NARRATION.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </p>
+        </div>
         <div className={styles.ghostTiles}>
           {[0, 1, 2, 3].map((i) => (
             <div key={i} className={`${styles.ghost} ${styles.ghostTile}`} />
           ))}
         </div>
-        <p className={styles.narration} aria-live="polite">
-          {NARRATION.map((line) => (
-            <span key={line}>{line}</span>
-          ))}
-        </p>
       </div>
     );
   }
