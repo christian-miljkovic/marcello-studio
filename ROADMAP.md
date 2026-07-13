@@ -17,7 +17,7 @@
 - Research done (2026-07-13): pricing benchmarks (in `docs/business-plan.md` §4), 29-prospect outreach list (`docs/prospects.md` + `.csv`, all `status=none`), outreach templates (`docs/outreach-templates.md`).
 - Gmail drafts for top prospects: created 2026-07-13 in Christian's Gmail (unsent, must be re-sent from studio address once it exists).
 - HAITCH rebuild (`~/fun/haitch`) is the anchor case study — **not yet shipped; no written permission yet to name them publicly**.
-- Deployed to Vercel (project `marcello`, scope christianmiljkovics-projects): stable URL `marcello-christianmiljkovics-projects.vercel.app` — **currently behind Vercel Authentication (default)**; not publicly viewable until protection is disabled in project settings or the custom domain is attached (custom domains are always public). Note `marcello.vercel.app` belongs to someone else.
+- Code on GitHub: `christian-miljkovic/marcello-studio` (branches `main` + `launch-site`), connected to Vercel project `marcello` — **pushes to `main` auto-deploy to production; other branches get preview URLs**. Stable URL `marcello-christianmiljkovics-projects.vercel.app` — **currently behind Vercel Authentication (default)**; not publicly viewable until protection is disabled in project settings or the custom domain is attached (custom domains are always public). Note `marcello.vercel.app` belongs to someone else.
 - Gmail connector token expired mid-session, so the 5 wave-1 emails live as text in `docs/outreach-drafts.md` instead of Gmail drafts.
 - Blockers: domain purchase + studio email (Christian, manual); Vercel deployment-protection toggle (Christian, manual — Settings → Deployment Protection); Slang employment-agreement moonlighting review (Christian, manual).
 
