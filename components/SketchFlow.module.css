@@ -87,6 +87,17 @@
   animation: footerIn 600ms 1900ms cubic-bezier(0.25, 0.1, 0.25, 1) backwards;
 }
 
+/* On small screens the plaque flows after the concept instead of floating over it */
+@media (max-width: 640px) {
+  .takeoverFooter {
+    position: static;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem 1rem 2rem;
+    background: #fff;
+  }
+}
+
 @keyframes footerIn {
   from { opacity: 0; }
   to { opacity: 1; }
