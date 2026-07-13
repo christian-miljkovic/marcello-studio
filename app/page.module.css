@@ -26,9 +26,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2.5rem;
-  text-align: center;
 }
 
 .wordmark {
@@ -40,7 +38,6 @@
 
 .intro {
   max-width: 30rem;
-  margin: 0 auto;
 }
 
 .label {
@@ -54,7 +51,6 @@
 .clients {
   list-style: none;
   display: flex;
-  justify-content: center;
   gap: 1.5rem;
 }
 
