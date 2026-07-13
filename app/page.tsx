@@ -16,9 +16,9 @@ export default function Home() {
           loop
           playsInline
           preload="metadata"
-          poster="/background-poster.jpg"
+          poster="/background-poster.jpg?v=2"
         >
-          <source src="/background.mp4" type="video/mp4" />
+          <source src="/background.mp4?v=2" type="video/mp4" />
         </video>
       </div>
       <div className={styles.column}>
