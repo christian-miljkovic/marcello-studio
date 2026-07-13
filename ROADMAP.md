@@ -12,7 +12,7 @@
 *Last updated: 2026-07-13 by Claude*
 
 - Studio identity chosen: **Marcello Studio** (Christian Marcello Miljkovic). Positioning: "a creative technology and design studio for fashion" — high touch, for brands + PR studios.
-- Portfolio site built at `~/fun/marcello/` (branch `launch-site`): tests green, lint clean, static build passing. Centered layout; contact is `contact@marcello.studio` — **domain not yet purchased, email not yet set up**.
+- Portfolio site built at `~/fun/marcello/` (branch `launch-site`): tests green, lint clean, static build passing. Left-aligned layout; tagline "High touch, from the first conversation to the final creation."; contact is `contact@marcello.studio` — **domain not yet purchased, email not yet set up**.
 - Domain shortlist: **marcello.studio ($21.99/yr, recommended)**, marcellostudio.co ($29.99), marcello-studio.com / themarcellostudio.com / studio-marcello.com ($11.25). marcello.com and marcellostudio.com are taken. (Availability checked 2026-07-13 — recheck at purchase.)
 - Research done (2026-07-13): pricing benchmarks (in `docs/business-plan.md` §4), 29-prospect outreach list (`docs/prospects.md` + `.csv`, all `status=none`), outreach templates (`docs/outreach-templates.md`).
 - Gmail drafts for top prospects: created 2026-07-13 in Christian's Gmail (unsent, must be re-sent from studio address once it exists).
