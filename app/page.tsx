@@ -9,12 +9,12 @@ export default function Home() {
   return (
     <main className={styles.page}>
       <div className={styles.column}>
-        <h1 className={styles.wordmark}>Marcello</h1>
+        <h1 className={styles.wordmark}>Marcello Studio</h1>
 
         <p className={styles.intro}>
-          Websites and applications for fashion brands, labels, and the studios
-          around them. High touch, from the first conversation to long after
-          launch.
+          A creative technology and design studio for fashion brands, labels,
+          and the studios around them. High touch, from the first conversation
+          to long after launch.
         </p>
 
         <section aria-labelledby="clients-heading">
@@ -26,9 +26,6 @@ export default function Home() {
               <li key={client.name}>
                 <a href={client.href} target="_blank" rel="noopener noreferrer">
                   {client.name}
-                  <span className={styles.arrow} aria-hidden="true">
-                    ↗
-                  </span>
                 </a>
               </li>
             ))}
@@ -36,7 +33,7 @@ export default function Home() {
         </section>
 
         <p className={styles.contact}>
-          <a href="mailto:studio@marcello.studio">studio@marcello.studio</a>
+          <a href="mailto:contact@marcello.studio">contact@marcello.studio</a>
           <span aria-hidden="true"> · </span>New York
         </p>
       </div>

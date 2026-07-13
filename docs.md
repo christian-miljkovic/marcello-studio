@@ -25,7 +25,7 @@ Path: @/
 ### Things to Know
 
 - The site must stay fully static: no images, no client JS beyond CSS transitions. `next build` prerenders `/`.
-- The contact email and domain (`studio@marcello.studio`) are placeholders until the domain purchase (tracked in @/ROADMAP.md week 1). Changing them touches @/app/page.tsx, the metadata in @/app/layout.tsx, and @/tests/page.test.tsx together.
+- The contact email and domain (`contact@marcello.studio`) are placeholders until the domain purchase (tracked in @/ROADMAP.md week 1). Changing them touches @/app/page.tsx, the metadata in @/app/layout.tsx, and @/tests/page.test.tsx together.
 - HAITCH is named on the site but written permission to name them publicly is still pending (tracked in @/ROADMAP.md).
 
 Created and maintained by Nori.

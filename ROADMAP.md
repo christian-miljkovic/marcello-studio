@@ -11,20 +11,22 @@
 
 *Last updated: 2026-07-13 by Claude*
 
-- Studio identity chosen: **Marcello** (Christian Marcello Miljkovic). Positioning: high-touch websites/applications for fashion brands + PR studios.
-- Portfolio site built at `~/fun/marcello/` (branch `launch-site`): tests green, lint clean, static build passing. Copy uses `studio@marcello.studio` — **domain not yet purchased, email not yet set up**.
+- Studio identity chosen: **Marcello Studio** (Christian Marcello Miljkovic). Positioning: "a creative technology and design studio for fashion" — high touch, for brands + PR studios.
+- Portfolio site built at `~/fun/marcello/` (branch `launch-site`): tests green, lint clean, static build passing. Centered layout; contact is `contact@marcello.studio` — **domain not yet purchased, email not yet set up**.
 - Domain shortlist: **marcello.studio ($21.99/yr, recommended)**, marcellostudio.co ($29.99), marcello-studio.com / themarcellostudio.com / studio-marcello.com ($11.25). marcello.com and marcellostudio.com are taken. (Availability checked 2026-07-13 — recheck at purchase.)
 - Research done (2026-07-13): pricing benchmarks (in `docs/business-plan.md` §4), 29-prospect outreach list (`docs/prospects.md` + `.csv`, all `status=none`), outreach templates (`docs/outreach-templates.md`).
 - Gmail drafts for top prospects: created 2026-07-13 in Christian's Gmail (unsent, must be re-sent from studio address once it exists).
 - HAITCH rebuild (`~/fun/haitch`) is the anchor case study — **not yet shipped; no written permission yet to name them publicly**.
-- Blockers: domain purchase + studio email (Christian, manual); Slang employment-agreement moonlighting review (Christian, manual).
+- Deployed to Vercel (project `marcello`, scope christianmiljkovics-projects): stable URL `marcello-christianmiljkovics-projects.vercel.app` — **currently behind Vercel Authentication (default)**; not publicly viewable until protection is disabled in project settings or the custom domain is attached (custom domains are always public). Note `marcello.vercel.app` belongs to someone else.
+- Gmail connector token expired mid-session, so the 5 wave-1 emails live as text in `docs/outreach-drafts.md` instead of Gmail drafts.
+- Blockers: domain purchase + studio email (Christian, manual); Vercel deployment-protection toggle (Christian, manual — Settings → Deployment Protection); Slang employment-agreement moonlighting review (Christian, manual).
 
 ## Week 1 (by 2026-07-20)
 
 - [ ] Christian: buy domain (recommend marcello.studio) and set up studio email (e.g. Google Workspace or iCloud+ custom domain)
 - [ ] Christian: review Slang employment agreement for moonlighting/IP clauses
-- [ ] Update site + templates if chosen domain/email differ from `studio@marcello.studio` (one-line changes: `app/page.tsx`, `docs/outreach-templates.md`)
-- [ ] Attach domain to Vercel project; site live on real domain
+- [ ] Update site + templates if chosen domain/email differ from `contact@marcello.studio` (one-line changes: `app/page.tsx`, `docs/outreach-templates.md`)
+- [ ] Attach domain to Vercel project `marcello`; site live on real domain (this also makes it public — until then, optionally disable Vercel Authentication in project settings to share the .vercel.app URL)
 - [ ] Ask HAITCH founders for written OK to name them (site + outreach) — ideally a quote too
 
 ## Month 1 (by 2026-08-13)

@@ -5,13 +5,15 @@ import Home from '@/app/page';
 describe('Marcello portfolio page', () => {
   test('shows the studio name as the page heading', () => {
     render(<Home />);
-    expect(screen.getByRole('heading', { name: /marcello/i })).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: /marcello studio/i })
+    ).toBeVisible();
   });
 
   test('tells visitors what the studio does', () => {
     render(<Home />);
     expect(
-      screen.getByText(/websites and applications for fashion/i)
+      screen.getByText(/creative technology and design studio/i)
     ).toBeVisible();
   });
 
@@ -38,7 +40,7 @@ describe('Marcello portfolio page', () => {
 
   test('offers a working email contact', () => {
     render(<Home />);
-    const link = screen.getByRole('link', { name: /studio@marcello\.studio/i });
-    expect(link).toHaveAttribute('href', 'mailto:studio@marcello.studio');
+    const link = screen.getByRole('link', { name: /contact@marcello\.studio/i });
+    expect(link).toHaveAttribute('href', 'mailto:contact@marcello.studio');
   });
 });

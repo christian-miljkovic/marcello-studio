@@ -26,7 +26,9 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2.5rem;
+  text-align: center;
 }
 
 .wordmark {
@@ -38,6 +40,7 @@
 
 .intro {
   max-width: 30rem;
+  margin: 0 auto;
 }
 
 .label {
@@ -45,38 +48,31 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #767676;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .clients {
   list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 .clients a {
   display: inline-block;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  line-height: 2;
 }
 
-.clients a:hover {
+.clients a:hover,
+.clients a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.arrow {
-  display: inline-block;
-  margin-left: 0.4em;
-  opacity: 0;
-  transition: opacity 150ms ease;
-}
-
-.clients a:hover .arrow,
-.clients a:focus-visible .arrow {
-  opacity: 1;
-}
-
 .contact {
+  font-size: 0.8rem;
   color: #767676;
 }
 
