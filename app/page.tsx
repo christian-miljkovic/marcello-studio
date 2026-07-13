@@ -14,7 +14,7 @@ export default function Home() {
         <p className={styles.intro}>
           A creative technology and design studio for fashion brands, labels,
           and the studios around them. High touch, from the first conversation
-          to long after launch.
+          to the final creation.
         </p>
 
         <section aria-labelledby="clients-heading">
