@@ -60,9 +60,10 @@
 
 .clients a {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.7333rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: #767676;
 }
 
 .clients a:hover,
