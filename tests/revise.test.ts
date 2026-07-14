@@ -1,20 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import { applyLocalRevision } from '@/lib/revise';
-import type { Sketch } from '@/lib/sketch';
+import { makeSketch } from './fixtures';
 
-const base: Sketch = {
+const base = makeSketch({
   palette: 'gallery',
   typeface: 'sans',
   casing: 'sentence',
   heroLine: 'A slow knit worn close to the skin',
   subLine: 'Hand-loomed in small batches.',
-  products: [
-    { name: 'Aran Cardigan', price: '$385' },
-    { name: 'Rib Scarf', price: '$140' },
-    { name: 'Seam Sweater', price: '$310' },
-    { name: 'Wool Beanie', price: '$95' },
-  ],
-};
+});
 
 describe('applyLocalRevision', () => {
   test('resolves palette words without touching the copy', () => {
@@ -41,6 +35,11 @@ describe('applyLocalRevision', () => {
     const revised = applyLocalRevision(base, 'warmer and serif');
     expect(revised?.palette).toBe('blush');
     expect(revised?.typeface).toBe('serif');
+  });
+
+  test('resolves layout requests', () => {
+    expect(applyLocalRevision(base, 'centered')?.layout).toBe('editorial');
+    expect(applyLocalRevision(base, 'split')?.layout).toBe('split');
   });
 
   test('returns null for notes that need the model', () => {

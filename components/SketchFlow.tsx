@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { track } from '@vercel/analytics';
 import SketchPreview from './SketchPreview';
+import LeadCapture from './LeadCapture';
 import { applyLocalRevision } from '@/lib/revise';
-import type { Answers, Sketch } from '@/lib/sketch';
+import { encodeShare, type Shared } from '@/lib/share';
+import { artifacts, type Answers, type Artifact, type Sketch } from '@/lib/sketch';
 import styles from './SketchFlow.module.css';
 
 const MAX_REVISIONS = 3;
@@ -14,26 +17,32 @@ const QUESTIONS: { key: keyof Answers; label: string }[] = [
   { key: 'mood', label: 'One word for the mood' },
 ];
 
+const STEP_COUNT = QUESTIONS.length + 1;
+
 type Status = 'asking' | 'sketching' | 'done' | 'error' | 'limited';
 
-export default function SketchFlow() {
-  const [step, setStep] = useState(0);
+export default function SketchFlow({ initial }: { initial?: Shared }) {
+  const [step, setStep] = useState(initial ? STEP_COUNT : 0);
   const [value, setValue] = useState('');
-  const [answers, setAnswers] = useState<Partial<Answers>>({});
-  const [sketch, setSketch] = useState<Sketch | null>(null);
-  const [status, setStatus] = useState<Status>('asking');
+  const [answers, setAnswers] = useState<Partial<Answers>>(
+    initial ? initial.answers : {}
+  );
+  const [sketch, setSketch] = useState<Sketch | null>(initial?.sketch ?? null);
+  const [status, setStatus] = useState<Status>(initial ? 'done' : 'asking');
+  const [shared, setShared] = useState(Boolean(initial));
   const [revisionsUsed, setRevisionsUsed] = useState(0);
   const [noteOpen, setNoteOpen] = useState(false);
   const [note, setNote] = useState('');
   const [revising, setRevising] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  async function requestSketch(complete: Answers) {
+  async function requestSketch(complete: Answers, artifact: Artifact) {
     setStatus('sketching');
     try {
       const res = await fetch('/api/sketch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(complete),
+        body: JSON.stringify({ ...complete, artifact }),
       });
       if (!res.ok) throw new Error(`sketch request failed: ${res.status}`);
       const data = (await res.json()) as { sketch?: Sketch; limited?: boolean };
@@ -41,6 +50,7 @@ export default function SketchFlow() {
         setStatus('limited');
         return;
       }
+      track('sketch_generated', { brand: complete.brand, artifact });
       setSketch(data.sketch);
       setStatus('done');
     } catch {
@@ -52,14 +62,13 @@ export default function SketchFlow() {
     event.preventDefault();
     const trimmed = value.trim();
     if (!trimmed) return;
-    const next = { ...answers, [QUESTIONS[step].key]: trimmed };
-    setAnswers(next);
+    setAnswers({ ...answers, [QUESTIONS[step].key]: trimmed });
     setValue('');
-    if (step < QUESTIONS.length - 1) {
-      setStep(step + 1);
-    } else {
-      void requestSketch(next as Answers);
-    }
+    setStep(step + 1);
+  }
+
+  function handleArtifact(artifact: Artifact) {
+    void requestSketch(answers as Answers, artifact);
   }
 
   function restart() {
@@ -68,10 +77,27 @@ export default function SketchFlow() {
     setAnswers({});
     setSketch(null);
     setStatus('asking');
+    setShared(false);
     setRevisionsUsed(0);
     setNoteOpen(false);
     setNote('');
     setRevising(false);
+    setCopied(false);
+  }
+
+  async function copyLink() {
+    if (!sketch) return;
+    const url = `${window.location.origin}/sketch?s=${encodeShare({
+      answers: answers as Answers,
+      sketch,
+    })}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt('Copy this link', url);
+    }
   }
 
   async function handleRevision(event: FormEvent) {
@@ -95,6 +121,7 @@ export default function SketchFlow() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...(answers as Answers),
+          artifact: sketch.artifact,
           revision: { sketch, note: trimmed },
         }),
       });
@@ -152,7 +179,7 @@ export default function SketchFlow() {
           sketch={status === 'done' ? sketch : null}
           answers={answers as Answers}
         />
-        {status === 'done' && (
+        {status === 'done' && sketch && (
           <div className={styles.takeoverFooter}>
             {noteOpen && revisionsUsed < MAX_REVISIONS ? (
               <form className={styles.noteForm} onSubmit={handleRevision}>
@@ -164,7 +191,7 @@ export default function SketchFlow() {
                   className={styles.noteInput}
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
-                  placeholder={'"warmer", "all serif", "moodier"'}
+                  placeholder={'"warmer", "all serif", "centered"'}
                   maxLength={60}
                   autoComplete="off"
                   autoFocus
@@ -179,13 +206,13 @@ export default function SketchFlow() {
               </form>
             ) : (
               <>
-                <p className={styles.cta}>
-                  Like the direction?{' '}
-                  <a href="mailto:contact@marcello.studio">
-                    contact@marcello.studio
-                  </a>
-                </p>
-                {revisionsUsed < MAX_REVISIONS ? (
+                {shared && (
+                  <p className={styles.cta}>
+                    Sketched for {(answers as Answers).brand}.
+                  </p>
+                )}
+                <LeadCapture answers={answers as Answers} sketch={sketch} />
+                {!shared && revisionsUsed < MAX_REVISIONS && (
                   <>
                     {revisionsUsed > 0 && (
                       <span className={styles.revCount}>
@@ -200,7 +227,8 @@ export default function SketchFlow() {
                       Ask for a change
                     </button>
                   </>
-                ) : (
+                )}
+                {!shared && revisionsUsed >= MAX_REVISIONS && (
                   <span className={styles.revCount}>
                     That&apos;s three revisions — the rest happens over email.
                   </span>
@@ -208,14 +236,46 @@ export default function SketchFlow() {
                 <button
                   type="button"
                   className={styles.button}
+                  onClick={copyLink}
+                >
+                  {copied ? 'Copied' : 'Copy link'}
+                </button>
+                <button
+                  type="button"
+                  className={styles.button}
                   onClick={restart}
                 >
-                  Start over
+                  {shared ? 'Start your own' : 'Start over'}
                 </button>
               </>
             )}
           </div>
         )}
+      </div>
+    );
+  }
+
+  if (step === QUESTIONS.length) {
+    return (
+      <div className={styles.flow}>
+        <div>
+          <p className={styles.counter}>
+            {String(step + 1).padStart(2, '0')} — {String(STEP_COUNT).padStart(2, '0')}
+          </p>
+          <p className={styles.label}>What should we sketch?</p>
+          <div className={styles.artifacts}>
+            {(Object.keys(artifacts) as Artifact[]).map((key) => (
+              <button
+                key={key}
+                type="button"
+                className={styles.artifactButton}
+                onClick={() => handleArtifact(key)}
+              >
+                {artifacts[key]}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -226,7 +286,7 @@ export default function SketchFlow() {
     <form className={styles.flow} onSubmit={handleSubmit}>
       <div>
         <p className={styles.counter}>
-          {String(step + 1).padStart(2, '0')} — 03
+          {String(step + 1).padStart(2, '0')} — {String(STEP_COUNT).padStart(2, '0')}
         </p>
         <label className={styles.label} htmlFor="sketch-answer">
           {question.label}
@@ -242,7 +302,7 @@ export default function SketchFlow() {
         />
       </div>
       <button type="submit" className={styles.button}>
-        {step < QUESTIONS.length - 1 ? 'Next' : 'Sketch it'}
+        Next
       </button>
     </form>
   );

@@ -20,6 +20,12 @@ const CASING_ASKS: [RegExp, Sketch['casing']][] = [
   [/\b(lowercase|sentence)\b/, 'sentence'],
 ];
 
+const LAYOUT_ASKS: [RegExp, Sketch['layout']][] = [
+  [/\b(centered|center|editorial)\b/, 'editorial'],
+  [/\b(split|offset)\b/, 'split'],
+  [/\b(poster|oversized)\b/, 'poster'],
+];
+
 function match<T>(asks: [RegExp, T][], note: string): T | null {
   for (const [pattern, value] of asks) {
     if (pattern.test(note)) return value;
@@ -36,7 +42,8 @@ export function applyLocalRevision(sketch: Sketch, note: string): Sketch | null 
   const palette = match(PALETTE_ASKS, lower);
   const typeface = match(TYPEFACE_ASKS, lower);
   const casing = match(CASING_ASKS, lower);
-  if (!palette && !typeface && !casing) return null;
+  const layout = match(LAYOUT_ASKS, lower);
+  if (!palette && !typeface && !casing && !layout) return null;
 
   // Only fully token-level notes resolve locally; a note that also carries
   // unmatched words (beyond connectives) still goes to the model.
@@ -46,9 +53,12 @@ export function applyLocalRevision(sketch: Sketch, note: string): Sketch | null 
     .filter(Boolean)
     .filter(
       (word) =>
-        ![...PALETTE_ASKS, ...TYPEFACE_ASKS, ...CASING_ASKS].some(([p]) =>
-          p.test(word)
-        )
+        ![
+          ...PALETTE_ASKS,
+          ...TYPEFACE_ASKS,
+          ...CASING_ASKS,
+          ...LAYOUT_ASKS,
+        ].some(([p]) => p.test(word))
     );
   if (residue.length > 0) return null;
 
@@ -57,6 +67,7 @@ export function applyLocalRevision(sketch: Sketch, note: string): Sketch | null 
     palette: palette ?? sketch.palette,
     typeface: typeface ?? sketch.typeface,
     casing: casing ?? sketch.casing,
+    layout: layout ?? sketch.layout,
     products: sketch.products.map((p) => ({ ...p })),
   };
 }

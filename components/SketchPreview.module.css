@@ -4,10 +4,10 @@
   --sketch-bg: #ffffff;
   --sketch-ink: #111111;
   --sketch-muted: #767676;
+  --sketch-accent: #ededed;
   --sketch-type: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   background: var(--sketch-bg);
   color: var(--sketch-ink);
   font-family: var(--sketch-type);
@@ -46,10 +46,10 @@
   color: var(--sketch-muted);
 }
 
-/* ── hero ── */
+/* ── hero: fills the first viewport; composition varies by layout token ── */
 
 .hero {
-  flex: 1;
+  min-height: calc(100dvh - 12rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -74,7 +74,65 @@
   line-height: 2;
 }
 
+.layoutEditorial .hero {
+  align-items: center;
+  text-align: center;
+}
+
+.layoutEditorial .heroLine {
+  font-size: clamp(2rem, 6.5vw, 5.5rem);
+  max-width: 18ch;
+}
+
+.layoutEditorial .subLine {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.layoutSplit .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 2rem;
+}
+
+.layoutSplit .heroLine {
+  font-size: clamp(2.2rem, 7vw, 6rem);
+}
+
+.layoutSplit .subLine {
+  margin-top: 0;
+  justify-self: end;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .layoutSplit .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .layoutSplit .subLine {
+    margin-top: 1.5rem;
+    text-align: left;
+    justify-self: start;
+  }
+}
+
 /* ── collection ── */
+
+.collection {
+  padding: clamp(2rem, 6vh, 4rem) 0 0;
+}
+
+.kicker {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sketch-muted);
+  margin-bottom: 1.25rem;
+}
 
 .products {
   list-style: none;
@@ -92,31 +150,36 @@
 .swatch {
   aspect-ratio: 3 / 4;
   margin-bottom: 0.6rem;
+  background-blend-mode: normal;
 }
 
 /* tone-on-tone drapery: each tile a different fold of the same cloth */
 .tile0 .swatch {
   background:
-    radial-gradient(130% 100% at 15% 0%, color-mix(in srgb, var(--sketch-ink) 16%, var(--sketch-bg)), transparent 65%),
-    linear-gradient(155deg, color-mix(in srgb, var(--sketch-ink) 7%, var(--sketch-bg)), var(--sketch-bg) 75%);
+    var(--grain),
+    radial-gradient(130% 100% at 15% 0%, color-mix(in srgb, var(--sketch-ink) 22%, var(--sketch-accent)), transparent 65%),
+    linear-gradient(155deg, color-mix(in srgb, var(--sketch-ink) 10%, var(--sketch-accent)), var(--sketch-accent) 75%);
 }
 
 .tile1 .swatch {
   background:
-    radial-gradient(110% 120% at 85% 10%, color-mix(in srgb, var(--sketch-ink) 13%, var(--sketch-bg)), transparent 60%),
-    linear-gradient(200deg, color-mix(in srgb, var(--sketch-ink) 9%, var(--sketch-bg)), var(--sketch-bg) 70%);
+    var(--grain),
+    radial-gradient(110% 120% at 85% 10%, color-mix(in srgb, var(--sketch-ink) 18%, var(--sketch-accent)), transparent 60%),
+    linear-gradient(200deg, color-mix(in srgb, var(--sketch-ink) 13%, var(--sketch-accent)), var(--sketch-accent) 70%);
 }
 
 .tile2 .swatch {
   background:
-    radial-gradient(140% 90% at 50% 100%, color-mix(in srgb, var(--sketch-ink) 15%, var(--sketch-bg)), transparent 62%),
-    linear-gradient(120deg, var(--sketch-bg) 30%, color-mix(in srgb, var(--sketch-ink) 8%, var(--sketch-bg)));
+    var(--grain),
+    radial-gradient(140% 90% at 50% 100%, color-mix(in srgb, var(--sketch-ink) 20%, var(--sketch-accent)), transparent 62%),
+    linear-gradient(120deg, var(--sketch-accent) 30%, color-mix(in srgb, var(--sketch-ink) 12%, var(--sketch-accent)));
 }
 
 .tile3 .swatch {
   background:
-    radial-gradient(100% 130% at 90% 90%, color-mix(in srgb, var(--sketch-ink) 17%, var(--sketch-bg)), transparent 58%),
-    linear-gradient(170deg, color-mix(in srgb, var(--sketch-ink) 6%, var(--sketch-bg)) 20%, var(--sketch-bg) 80%);
+    var(--grain),
+    radial-gradient(100% 130% at 90% 90%, color-mix(in srgb, var(--sketch-ink) 24%, var(--sketch-accent)), transparent 58%),
+    linear-gradient(170deg, color-mix(in srgb, var(--sketch-ink) 9%, var(--sketch-accent)) 20%, var(--sketch-accent) 80%);
 }
 
 .productName {
@@ -131,8 +194,105 @@
   color: var(--sketch-muted);
 }
 
+/* ── landing: teaser + faux signup ── */
+
+.notify {
+  margin-top: clamp(2rem, 5vh, 3rem);
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.notifyField {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sketch-muted);
+  border-bottom: 1px solid color-mix(in srgb, var(--sketch-ink) 40%, transparent);
+  padding-bottom: 0.35rem;
+  width: min(18rem, 50vw);
+}
+
+.notifyButton {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── press: preview list + office ── */
+
+.pressBlock {
+  padding: clamp(2rem, 6vh, 4rem) 0 0;
+}
+
+.pressList {
+  list-style: none;
+}
+
+.pressItem {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--sketch-ink) 18%, transparent);
+  font-size: clamp(1rem, 2.6vw, 1.6rem);
+}
+
+.pressItem:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--sketch-ink) 18%, transparent);
+}
+
+.pressItem .productName {
+  font-size: inherit;
+  letter-spacing: 0.06em;
+}
+
+.pressIndex {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--sketch-muted);
+}
+
+.pressOffice {
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+
+.pressLine {
+  font-size: 0.7333rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sketch-muted);
+  line-height: 2.1;
+}
+
+/* ── editorial strip ── */
+
+.editorial {
+  margin: clamp(3rem, 8vh, 5rem) calc(-1 * clamp(1rem, 4vw, 3rem)) 0;
+  padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 4vw, 3rem);
+  background: var(--sketch-accent);
+}
+
+.aboutLine {
+  font-size: clamp(1.4rem, 3.6vw, 2.6rem);
+  line-height: 1.3;
+  max-width: 28ch;
+}
+
+/* ── concept footer ── */
+
+.conceptFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: clamp(3rem, 8vh, 5rem);
+  padding: 1.25rem 0 3.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--sketch-ink) 18%, transparent);
+}
+
 .note {
-  margin-top: 2rem;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;

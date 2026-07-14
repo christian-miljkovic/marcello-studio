@@ -26,7 +26,6 @@ export default async function OpengraphImage() {
           backgroundColor: '#ffffff',
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={silk}
           alt=""
