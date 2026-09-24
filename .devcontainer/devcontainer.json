@@ -1,0 +1,25 @@
+{
+  "name": "Marcello Studio",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "remoteUser": "node",
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Marcello website",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
