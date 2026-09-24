@@ -1,0 +1,1 @@
+transaction_id,date,amount,currency,transaction_kind,from_source,to_source,funding_treatment,related_transaction_id,source_reference,cpa_review_id,notes,created_at,updated_at

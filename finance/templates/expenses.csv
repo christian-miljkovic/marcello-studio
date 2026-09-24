@@ -1,0 +1,1 @@
+transaction_id,date,vendor,amount,currency,category,description,business_purpose,paid_from,funding_treatment,business_use_percent,receipt_url,client_or_project,startup_vs_operating,asset_flag,tax_review_status,notes,cpa_reviewed,created_at,updated_at,transaction_kind,related_transaction_id,source_reference,allocation_basis,reconciliation_status,cpa_review_id

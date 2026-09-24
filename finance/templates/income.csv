@@ -1,0 +1,1 @@
+transaction_id,date,payer_reference,amount,currency,transaction_kind,description,client_or_project,invoice_reference,received_into,related_transaction_id,source_reference,reconciliation_status,notes,created_at,updated_at
